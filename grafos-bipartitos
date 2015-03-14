@@ -1,0 +1,225 @@
+#Realizado por: Alzolar Maria
+#Fecha:16 de Agosto del 2014
+#Verificar si grafo es bipartito balanceado, minimo grado de un grafo 
+
+import matplotlib.pyplot as plt
+from collections import deque
+import networkx as grafo
+import os
+
+class Grafobipartito:
+	
+	def __init__(self):
+		self.bipartito = dict()
+		self.minimoGrado
+	 
+	def __str__(self):
+		return str(self.bipartito)
+	
+	def leerNodos(self):
+		nodo = '1' 
+		while nodo != 'f':
+			nodo = raw_input('Ingrese los nodos (Presione "F" para terminar): ')
+			print G.nodes()
+			G.add_node(nodo)
+			pass
+		return G.nodes()
+
+	def leerEdges(self):
+		edge='1'
+		peso=3	
+		while edge != 'f':
+			nodo = raw_input('Ingrese Nodo 1: ')
+			edge = raw_input('Ingrese Nodo 2: ')
+			G.add_edge(nodo,edge,weight=peso)
+			print G.edges()
+			pass
+		return G.edges()
+
+	def minimoGrado(self):
+		gradoMayor=0
+		print G.number_of_nodes()
+		print G.number_of_edges()
+		print "Nodos: ",G.nodes()
+		print "Relaciones: ",G.edges()	
+		#Incidencias de un nodo en especifico
+		cantidad_nodos=G.nodes()
+		for x in cantidad_nodos:
+			var=G.neighbors(cantidad_nodos[x])
+			print "Nodo [", cantidad_nodos[x] ,"]"
+			print "Nodos Incidentes", var
+			cont=len(var)
+			print "================================="
+			"""print "Cantidad de nodos incidentes: ", cont"""
+			if cont>gradoMayor:
+				gradoMayor=cont
+				pass
+			pass
+		print "El minimo grado del grafo es:"
+		return gradoMayor
+
+	def profundidad(self,estado=[]):
+		for u in G.nodes():
+			estado[u].append(0)
+			padre[u].append(0)
+			pass
+		tiempo=0
+		for u in G.edges():
+			if estado[u]==0:
+				self.DFS_Visitar(u,tiempo)
+				pass
+			pass
+
+	def DFS_Visitar(self,u,tiempo,d=[],f=[]):
+		tiempo=tiempo+1
+		d[u].append(tiempo)
+		for v in G.edges():
+			if estado[v]==0:
+				DFS_Visitar(v,tiempo)
+				estado[u]=1
+				tiempo=tiempo+1
+				f[u].append(tiempo)
+				pass
+			pass
+	
+		#elementosRecorridos.append(elementoInicial)
+		#edges.remove(elementoInicial)
+		#var=G.neighbors(elementoInicial)
+		#print "edges: ", edges		
+		#print "Elemento inicial: ", elementoInicial
+		#print "Vecinos de elementoInicial: ", var
+		#print "Elementos recorridos: ", elementosRecorridos
+		#while edges!=[]:
+			#ultimo= len(elementosRecorridos)
+			#print "." , ultimo
+			#elementoInicial = ultimo
+			#self.profundidad(edges,elementoInicial)
+			#pass
+
+	def dibujarGrafo(self):
+		elarge=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] >0.5]
+		esmall=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] <=0.5]
+		pos=grafo.spring_layout(G) # positions for all nodes
+		grafo.draw_networkx_nodes(G,pos,node_size=700)
+		grafo.draw_networkx_edges(G,pos,edgelist=elarge,width=6)
+		grafo.draw_networkx_edges(G,pos,edgelist=esmall,width=6,alpha=0.5,edge_color='b',style='dashed')
+		grafo.draw_networkx_labels(G,pos,font_size=20,font_family='sans-serif')
+		plt.axis('off')
+		plt.show() # display
+	
+	def grafoBipartito(self):
+		inicio=1
+
+	def combinacion(self,combinar,lista,listanueva,mitad,conjunto):
+		new_comb=[]
+		for x in combinar:
+		    tamano = len(x)
+		    if tamano<mitad:
+		        pto=lista.index(x[len(x)-1]) #Hace que el nuevo elemento agregado de "Lista", sea el siguiente en posicion del ultimo caracter del elemento "combinar"
+		        for j in range(pto,len(lista)): # para cada elemento de 'lista' desde el elemento "lista" que hace parte del ultimo caracter del elemento de "combinar" hasta el ultimo elemento de'lista'
+		            if lista[j] not in x and lista[len(lista)-1] not in x:  #Si el elemento de "lista" no esta en el elemento "combinar" y ademas el elemento "lista" no es el ultimo caracter del elemento "combinar"
+		                new_comb.append(x+lista[j]) #Agrega a una nueva lista la combinacion
+		                conjunto.append(x+','+lista[j])
+		        listanueva=new_comb
+		        pass
+		return new_comb #Esta nueva lista se utilizara como parametro al llamar de nuevo la funcion...
+	
+	def comparar(self,conjunto,lados):
+		conjuntos = conjunto
+		conjuntos_disjuntos = []
+		for x in conjunto:
+			tamano_conjunto = len(x)
+			cont = 0
+			comb_final=x
+			listanueva=[]
+			conjunto=[]
+			encontrado = False
+			while cont<1:    #Un bucle que llama la funcion hasta que esten todas las combinaciones posibles
+				comb_final=self.combinacion(comb_final,x,listanueva,2,conjunto)
+				cont = cont +1
+				pass
+			#print " "
+			#print "-----------------------------------------"
+			#print "Combinacion de cada conjunto", comb_final
+			for i in comb_final:
+				encontrado = False
+				for k in lados:
+					if (i[0]==k[0] and i[1]==k[1]):
+						encontrado = True
+						k=lados
+				pass
+			if encontrado==False:
+				conjuntos_disjuntos.append(x)
+				print "Conjunto Disjunto" , x
+				for l in conjuntos:
+					tamano_sub_conjunto = len(l)
+					encontrado_dis=False
+					for j in l:
+						if j in x:
+							#print "Comparando en: ",j ,"Subconjunto: ",l
+							encontrado_dis = True
+							pass
+						pass
+					if encontrado_dis ==False:
+						print ""
+						print "Encontrado Conjunto Posible: ", l
+						tamano_conjunto = len(l)
+						#print tamano_conjunto
+						cont = 0
+						comb_final=l
+						#print comb_final
+						listanueva=[]
+						conjunto=[]
+						encontrado = False
+						while cont<1:    #Un bucle que llama la funcion hasta que esten todas las combinaciones posibles
+							comb_final=self.combinacion(comb_final,l,listanueva,2,conjunto)
+							cont = cont +1
+							pass
+						#print "*****************************************************"
+						print "Combinacion del conjunto posible encontrado", comb_final			
+						encontrado = False
+						for i in comb_final:
+							for n in lados:
+								if (i[0]==n[0] and i[1]==n[1]):
+									encontrado = True	
+									print "Encontrado ",encontrado
+									n=lados
+									break					
+									pass
+								#print "i[0]",i[0], "k[0]",i[0],"i[1]",i[1],"k[1]",i[1]
+							pass
+							print "Encontrado...",encontrado
+							if encontrado==True:
+								break
+								pass
+						if encontrado==False:
+							print "Lados: ", lados
+							print "----------------Es un Conjunto Disjunto------------" , l
+							pass
+						else:
+							break
+					pass
+	 	pass 
+
+G=grafo.Graph()
+Prueba = Grafobipartito()
+nodos =Prueba.leerNodos()
+edges=Prueba.leerEdges()
+#Prueba.minimoGrado()
+#print Prueba.grafoBipartito()
+print "Edges: ",edges
+#Prueba.dibujarGrafo()
+global bandera
+bandera =0
+comb_final=nodos
+listanueva=[]
+conjunto=[]
+mitad = len(nodos)/2
+print "COMBINACIONES PARA CALCULAR CONJUNTOS DISJUNTO", mitad
+print "++++++++++++++++++++++++++++++++++++++++++++++"
+cont = 0
+while cont<mitad-1:    #Un bucle que llama la funcion hasta que esten todas las combinaciones posibles
+	comb_final=Prueba.combinacion(comb_final,nodos,listanueva,mitad,conjunto)
+	print "Resultado Final: ", comb_final
+	cont = cont +1
+Prueba.comparar(comb_final,edges)
