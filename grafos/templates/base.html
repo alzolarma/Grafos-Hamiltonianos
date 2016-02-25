@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+ 
+{% block content %}
+<h2>Personas</h2>
+<em>Persona - DNI</em>
+<ul>
+    {% for grafo in object_list %}
+        <li>{{ grafo.nodes }} - {{ grafo.edges }} </li>
+    {% endfor %}
+</ul>
+{% endblock %}

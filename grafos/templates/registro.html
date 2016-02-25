@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>CIPUG</title>
+<link rel="shortcut icon" href="img/favicon/favicon.png">
+<link href="{{STATIC_URL}}css/style.css" rel="stylesheet" type="text/css"/>
+<link href="{{STATIC_URL}}font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<body>
+        <nav class="header_nav_left">
+            <div class="central"> 
+                <div> <a href="/index">SEGUDO</a> </div>
+                <ul class="mi_menu">
+                    <li><a href="/explorar">Explorar</a></li>              
+                    <li><a href="/pruebas">Pruebas</a></li>              
+                    <li><a href="#">Ayuda</a></li>
+                    <span id="login">
+                        <a href=""> Login</a>
+                    </span>
+                </ul> 
+            </div>          
+        </nav>
+    	<div id="formulario_grafo">
+            <h2>Crea tu cuenta llenado el formulario</h2>
+            <form>
+                <div> 
+                    <div>
+                        <label>Nombre de Usuario</label> <br>
+                        <input id="" name="" class="" type="text">
+                        <span>Ingre un nombre de usuario, facil de recordar para ingresar al sistema.</span>
+                    </div>
+                    <div>
+                        <label>Correo Electronido:</label> <br>
+                        <input id="" name="" class="" type="text">
+                        <span>Ingrede su correo electronico, este tambien podra ser usado para acceder al sistema</span>
+                    </div>
+                    <div>
+                        <label>Contrasena:</label> <br>
+                        <input id="" name="" class="" type="text">
+                        <span>La contrasena puede contener numeros, letras, y ciertos caracteres especiales.</span>
+                    </div>                    
+                    <div>
+                        <label>Confirma su contrasena:</label><br>
+                        <input id="" name="" class="" type="text">
+                        <span>Por favor confirme su contrasena.</span>
+                    </div>
+                    <div>
+                        <label></label><input class="button" type="submit" value="Crear Cuenta">
+                    </div>
+                </div>    
+            <hr class="hr">            
+            </form> 
+        </div>
+        <script type="text/javascript" src="{{STATIC_URL}}js/validar.js"></script>
+        <script type="text/javascript" src="{{STATIC_URL}}js/jquery-1.9.1.js"></script>
+</body>
+</html>

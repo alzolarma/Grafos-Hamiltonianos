@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>CIPUG</title>
+<link rel="shortcut icon" href="img/favicon/favicon.png">
+<link href="{{STATIC_URL}}css/style.css" rel="stylesheet" type="text/css"/>
+<link href="{{STATIC_URL}}font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<body>
+        <nav class="header_nav_left">
+
+            <div class="container central"> 
+                <div class="col-md-6">
+                    <a href="/index">GRAFO BIPARTITOS</a> 
+                </div>
+                <!--form id="" action="#" method="post">
+                    <div class="buscar">
+                        <input id="" name="buscar" class="" type="text" placeholder="Buscar">
+                    </div>
+                </form> -->
+                
+            </div>  
+        </nav> 
+    	
+        <span id="modo">
+    			<div id="modo_grafico" class="active"> </div>
+    			<div id="modo_matematico" class="inactive"> </div>
+    	</span>
+
+        <script type="text/javascript">
+          
+            function validarInterprete(opc){
+
+                if ($("#input_edges").val().match(/^{([(]{1}[a-zA-Z]+[,][a-zA-Z]+[)]{1})+}$/) &&  $("#input_node").val().match(/^{[a-zA-Z]+([,][a-zA-Z]+)+}$/))
+                {
+                    
+                    var arrayEdges = $("#input_edges").val().replace(/\)/g,"-").replace(/\(/g,"").replace(/\{/g,"").replace(/\}/g,"");  
+                    
+                    $("#input_edges").val(arrayEdges);
+
+                    var arrayNodes = $("#input_node").val().replace(/\{/g,"").replace(/\}/g,"");
+                    var arrayNodesFinal = arrayNodes.split(",");
+                    $("#input_node").val(arrayNodesFinal);
+
+                    $("#opc").val(opc);
+                    $("#form_graf").submit();
+
+                }
+                else 
+                {
+                    if(!$("#input_node").val().match(/^{[a-zA-Z]+([,][a-zA-Z]+)+}$/))
+                    {   
+                        if($("#input_node").val()=="")
+                        {
+                            $(".m1").empty(); 
+                            $(".m1").append("Ingrese los Vértices");  
+                        }else{
+                            $(".m1").empty(); 
+                            $(".m1").append("Expresión Incorrecta");  
+                        } 
+                        $("#input_node").css("color","red");
+                        $(".m1").css("display","block");
+                    }else{
+                        $("#input_node").css("color","#000");
+                        $(".m1").css("display","none");
+                    }
+                    if(!$("#input_edges").val().match(/^{([(]{1}[a-zA-Z]+[,][a-zA-Z]+[)]{1})+}$/)) 
+                    {
+                         if($("#input_edges").val()=="")
+                        {
+                            $(".m2").empty(); 
+                            $(".m2").append("Ingrese las Aristas");  
+                        }else{
+                            $(".m2").empty(); 
+                            $(".m2").append("Expresión Incorrecta");  
+                        } 
+
+                        $("#input_edges").css("color","red");                        
+                        $(".m2").css("display","block");
+                    }else{                        
+                        $("#input_edges").css("color","#000");                        
+                        $(".m2").css("display","none");
+                    }
+
+                }
+          
+            }
+        </script>
+
+        <div id="formulario_graf">
+
+            <div class="container"> 
+
+                <form id="form_graf" action="/search/" method="POST" onkeyup="tiene_letras1()">
+                    {%  csrf_token  %} 
+                    {{  form.as_p  }}
+                    <div id="input_left"> 
+                        <div class="input">
+                            <label>Conjunto de Vértices:</label> 
+                            <input id="input_node" name="input_nodes" class="input_form" type="text" value="{A,B,C,D,E,F,G,H,I,J,K,L,M,N}">
+                            <span class="mensaje_alerta m1">Expresión Incorrecta</span>
+                        
+                        </div>
+                        <div class="input">
+                            <label>Conjunto de Aristas:</label> 
+                           <!-- <input id="input_edges" name="input_edges" class="input_form" type="text" value="{(A,C)(A,D)(A,E)(A,F)(A,G)(B,C)(B,D)(B,E)(B,F)(B,G)(M,L)(M,K)(M,J)(M,H)(M,I)(N,L)(N,K)(N,J)(N,H)(N,I)(C,L)(D,K)(E,J)(F,H)(G,I)}"> -->
+                           <input id="input_edges" name="input_edges" class="input_form" type="text" value="{(A,D)(A,E)(A,F)(A,G)(B,D)(B,E)(B,F)(B,G)(M,K)(M,J)(M,H)(M,I)(N,K)(N,J)(N,H)(N,I)(D,H)(E,I)(F,J)(G,K)(C,G)(C,E)(C,D)(C,F)}">
+
+
+                      <span class="mensaje_alerta m2">Expresión Incorrecta</span>
+                        </div>
+                        <div class="input">
+                            <label>&nbsp;</label>
+                            <input class="button" type="button" value="Generar" oncLick= "validarInterprete(0)">
+                        </div>
+                        <input type="hidden" id="opc" name="opc"></input>
+                    </div>                
+                </form>
+
+            </div>
+            <div class="container">
+            
+                <div class="content_nav col-md-8">
+                    <ul class="ul_result">
+                        <li> 
+                            <a> <span class="span_ul_result"></span>
+                             Minimo Grado:
+                            </a>
+                        </li>
+                        <li> 
+                            <a> 
+                                <span class="span_ul_result"><i class="fa fa-circle-thin"></i> </span>
+                                Conjunto Independiente
+                            </a>
+                        </li>
+                        <li> 
+                            <a> <span class="span_ul_result"><i class="fa fa-share-alt"></i> </span> 
+                                Camino Hamiltoniano
+                            </a>
+                        </li>
+                        <li> 
+                            <a> <span class="span_ul_result"><i class="fa fa-columns"></i> </span> 
+                                Conjuntos Disjuntos
+                            </a>
+                        </li>
+                        <li> 
+                            <a oncLick= "validarInterprete(5)"> <span class="span_ul_result"><i class="fa fa-eye"></i></span>
+                            Informe Detallado
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="container">
+                
+                <div id="result" class="col-sm-8">
+                     
+                    <div id="matriz_ady">
+                       <!--
+                       {% if results %}{{results}}{% endif %}
+                       {% if edges %}{{edges}}{% endif %}
+                       {% if minimoGrado %}{{minimoGrado}}{% endif %}
+                        -->
+                      
+                       <table>
+                           <tr></tr>
+                           <tr></tr>
+                       </table> 
+                    </div>  
+
+                </div>  
+                
+                <div class="resultados">
+
+                    <div class="resultados-header text-center">
+                        <h4> Resultados</h4>
+                    </div>
+
+                    <div class="flex">
+
+                        <div class="text-center">
+                            <h6>Minimo Grado</h6>
+                            <h3><strong> {% if minimoGrado %}{{minimoGrado}}{% endif %} </strong></h3>
+                        </div>
+
+                        <div class="text-center">
+                            <h6>Hamiltoniano</h6>
+                            <h3><strong> {% if hamiltoniano %}{{hamiltoniano}}{% endif %} </strong></h3>
+                        </div> 
+
+                    </div>
+
+                    <div class="conjuntos text-center">
+
+                        <div class="resultados-header border-top">
+
+                            <h4> Conjuntos Disjuntos</h4>
+                        
+                        </div>
+
+                        <div class="flex">
+
+                            <div class="text-center">
+                                <h6>Conjunto A</h6>
+                                <h5> <strong> {% if conjuntoA%}{{conjuntoA}}{% endif %} </strong></h5>
+                            </div>
+
+                             <div class="text-center">
+                                <h6>Conjunto B</h6>
+                                <h5> <strong> {% if conjuntoB%}{{conjuntoB}}{% endif %} </strong></h5>
+                            </div>
+
+                        </div>
+                    </div>
+<!--
+                    <div class="conjuntos text-center">
+
+                        <div class="resultados-header border-top">
+
+                            <h4> Conjunto Independiente </h4>
+                        
+                        </div>
+
+                        <div class="flex">
+
+                            <div class="text-center">
+                                <h6>Conjunto A</h6>
+                                <h5> <strong> {% if conjuntoA%}{{conjuntoA}}{% endif %} </strong></h5>
+                            </div>
+                        </div>
+                    </div>
+                -->
+
+                </div>              
+            </div>
+
+        </div>
+        <script type="text/javascript" src="{{STATIC_URL}}js/validar.js"></script>
+        <script type="text/javascript" src="{{STATIC_URL}}js/jquery-1.9.1.js"></script>
+</body>
+</html>

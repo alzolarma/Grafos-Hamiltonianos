@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <title></title>
+    <meta content="">
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/style.css">
+  </head>
+  <body>
+  	<head>
+  		<nav>
+  			<ul>
+          {% for dato in grafos %}
+          <li> <a href="inicio">{{dato.nodes}}
+           inicio</a></li>
+  				<li> <a href="/sobre"> sobre</a></li>
+           {% endfor %}         
+        </ul>
+  		</nav>
+  	</head>
+    jeje
+  	
+  </body>
+</html>
